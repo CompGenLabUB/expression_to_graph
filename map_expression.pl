@@ -32,27 +32,38 @@ use Color::Spectrum::Multi;
 # VARIABLES
 #================================================================================
 my $expression_file = shift @ARGV;
+my $svg_filename    = shift @ARGV;
 
 
 #================================================================================
 # MAIN LOOP
 #================================================================================
 
-my $exp_info    = expression($expression_file);
+my $exp_info     = expression($expression_file);
 my @sorted_nodes = sort {
 	$exp_info->{$a} <=> $exp_info->{$b}
 } keys %{ $exp_info };
 
+# Get values
+my @values = map {
+		$exp_info->{$_};
+} @sorted_nodes;
 
-my %nodes_2_color = ();
-my $spect = Color::Spectrum::Multi->new();
-my @color = $spect->generate(scalar(@sorted_nodes), "#FF0000", "#00FF00");
+# Get intervals
+my ($min, $max) = ($values[0], $values[-1]) ;
+my @intervals = ($min);
+calc_intervals($min, $max, \@intervals, $min);
+my $int_values = join_intervals(\@intervals);
 
-foreach my $i (0..$#sorted_nodes) {
-	$nodes_2_color{$sorted_nodes[$i]} = $color[$i];
-}
+# Assign color to each interval
+my ($int_2_colors, $colors) = int_to_colors($int_values);
+print_colors($int_2_colors, $int_values, $expression_file);
 
-print Dumper(\%nodes_2_color);
+# Assign a color to each node
+my $nodes_2_color = data_to_color($exp_info, $int_2_colors);
+
+change_svg($nodes_2_color, $svg_filename, $colors);
+
 
 #================================================================================
 # FUNCTIONS
@@ -69,9 +80,181 @@ sub expression {
 	while (<$fh>) {
 		chomp;
 		my ($node, $value) = split /\t/, $_;
-		$exp_info{$node} = int($value);
+		$exp_info{$node} = log($value)/log(2);
 	}
 
 	return \%exp_info;
+
+} # sub expression
+
+#--------------------------------------------------------------------------------
+sub calc_intervals {
+	my $min            = shift;
+	my $max            = shift;
+	my $intervals      = shift;
+	my $interval_value = shift;
+
+	return if ($interval_value >= $max);
+
+	$interval_value += 1;
+	push @{ $intervals }, $interval_value;
+
+	calc_intervals($min, $max, $intervals, $interval_value);
+
+} # sub calc_intervals
+
+#--------------------------------------------------------------------------------
+sub join_intervals {
+	my $intervals  = shift;
+	my %int_values = ();
+
+	for my $i (0..@{ $intervals } -2) {
+		$int_values{$intervals[$i] . "-" . $intervals[$i+1]} = $i;
+	}
+
+	return \%int_values;
 }
 
+#--------------------------------------------------------------------------------
+sub int_to_colors {
+	my $intervals    = shift;
+	my $number       = keys %{ $intervals };
+	my %int_2_colors = ();
+
+	my $spect = Color::Spectrum::Multi->new();
+	my @colors = $spect->generate($number, "#FF0000", "#00FF00");
+
+	my @sorted_int = sort { 
+		$intervals->{$a} <=> $intervals->{$b} 
+	} keys %{ $intervals };
+
+	foreach my $i (0..$#colors) {
+		$int_2_colors{$sorted_int[$i]} = $colors[$i];
+	}
+
+	return (\%int_2_colors, \@colors);
+}
+
+#--------------------------------------------------------------------------------
+sub print_colors {
+	my $int_2_colors = shift;
+	my $intervals    = shift;
+	my $filename     = shift;
+
+	open my $html_fh, '>', "colors_$filename.html"
+		or die "Can't write to colors_$filename.html : $!\n";
+
+	print $html_fh <<'EOF'
+Content-Type: text/html; charset=ISO-8859-1
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head><title>Untitled Document</title>
+</head><body><table cellspacing="0"><tr><td>Offsets 31 54 55</td></tr>
+EOF
+;
+	my @sorted_int = sort { 
+		$intervals->{$a} <=> $intervals->{$b} 
+	} keys %{ $intervals };
+
+	foreach my $int (@sorted_int) {
+		print $html_fh "<tr><td bgcolor=\"", $int_2_colors->{$int}, "\">", $int, "</td></tr>", "\n";
+	}
+
+	close $html_fh;
+	return;
+
+} # sub print_colors
+
+#--------------------------------------------------------------------------------
+sub data_to_color {
+	my $data         = shift;
+	my $int_2_colors = shift;
+	my %data_2_color = ();
+
+	foreach my $node (keys %{ $data }) {
+		foreach my $interval (keys %{ $int_2_colors }) {
+			my ($min, $max) = split /\-/, $interval;
+			my $rounded_min = sprintf("%.4f", $min);
+			my $rounded_max = sprintf("%.4f", $max);
+			my $rounded_val = sprintf("%.4f", $data->{$node});
+
+			if ($rounded_val >= $rounded_min and $rounded_val <= $rounded_max) {
+				$data_2_color{$node} = $int_2_colors->{$interval}
+					unless exists $data_2_color{$node};
+			}# if
+
+		} # foreach interval
+	} # foreach node
+
+	return \%data_2_color;
+
+} # sub data_2_color
+
+#--------------------------------------------------------------------------------
+sub change_svg {
+	
+	my $nodes_2_color = shift;
+	my $svg_file      = shift;
+	my $colors        = shift;
+
+	open my $svg_fh, '<', $svg_file
+		or die "Can't asdf open $svg_file : $!\n";
+
+
+	local $/ = '<circle';
+
+	my $first =<$svg_fh>;
+	$first =~ s/<circle//;
+	$first =~ s/[\s\t]+$//;
+	
+	print "$first\n"; # skip first line;
+	print_legend($colors);
+
+	while (<$svg_fh>) {
+		
+		chomp;
+		if ($_ =~ m/class=\"(\w+)\"/g) {
+			my $node = $1;
+			if (exists $nodes_2_color->{$node}) {
+				my $color = $nodes_2_color->{$node};
+
+				$_ =~ s/fill=\"(.*?)\"/fill=\"$color\"/g;
+				#$_ =~ s/fill=\"#(\d+)\"/fill=\"$color\"/ge;
+
+				print "\t<circle$_\n";
+			} else {
+				print "\t<circle$_\n";# if gene
+			}
+		
+		} # if node
+		
+	} # while 
+
+	return;
+
+} # sub change_svg
+
+
+#--------------------------------------------------------------------------------
+sub print_legend {
+	my $colors = shift;
+
+	my $x = 70;
+	my $y = 50;
+
+	foreach my $color (@{ $colors }) {
+		print "<rect", "\n",
+		      "style=\"fill:$color;fill-opacity:1;stroke:none\"", "\n",
+		      "id=\"rect3099\"", "\n",
+		      "width=\"250\"", "\n",
+		      "height=\"60\"", "\n",
+		      "x=\"$x\"", "\n",
+		      "y=\"$y\" />", "\n";
+		$y += 62;
+	} 
+
+	return;
+}
