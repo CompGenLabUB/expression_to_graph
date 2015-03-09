@@ -61,7 +61,7 @@ my @sorted_nodes = sort {
 
 # Get values
 my @values = map {
-		$exp_info->{$_};
+	$exp_info->{$_};
 } @sorted_nodes;
 
 # Get intervals
@@ -326,7 +326,7 @@ on the expression of each node. The output will be printed
 to STDOUT.
 
 Usage: 
-	perl map_expression.pl --exp <file> --svg <svg_file> <options> > /path/to/output.svg
+	perl map_expression.pl <options> > /path/to/output.svg
 
 Options:
 
