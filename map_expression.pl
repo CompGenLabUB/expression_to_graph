@@ -303,11 +303,12 @@ Usage:
 Options:
 
 	REQUIRED:
-	--exp    - dot file with expression data.
-	--svg    - svg file.
+	--exp <file>   - dot file with expression data.
+	--svg <file>   - svg file.
 
 	OPTIONAL:
-	--cutoff - everything below this value will be white.
+	--cutoff <integer> - everything below this value will be white.
+	--html   <file>    - creates an html file with the gradient generated.
 
 --------------------------------------------------------------------------
 EOF
