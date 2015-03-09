@@ -27,7 +27,7 @@ use strict;
 use Data::Dumper;
 use Color::Spectrum::Multi;
 use Getopt::Long;
-
+use CGI;
 
 #================================================================================
 # VARIABLES
@@ -35,8 +35,7 @@ use Getopt::Long;
 my $expression_file;
 my $svg_filename;
 my $help;
-
-my $cutoff          = 10; 
+my $cutoff = 10; 
 	# Default
 
 GetOptions(
@@ -158,28 +157,28 @@ sub print_colors {
 	my $intervals    = shift;
 	my $filename     = shift;
 
+	my $cgi = CGI->new;
+
+
 	open my $html_fh, '>', "colors_$filename.html"
 		or die "Can't write to colors_$filename.html : $!\n";
 
-	print $html_fh <<'EOF'
-Content-Type: text/html; charset=ISO-8859-1
+	print $html_fh $cgi->header, 
+	               $cgi->start_html("${filename}_colors"),
+                   $cgi->h1('Your colors');
+	print $html_fh '<table cellspacing=\0"><tr><td>Offsets 31 54 55</td></tr>';
 
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head><title>Untitled Document</title>
-</head><body><table cellspacing="0"><tr><td>Offsets 31 54 55</td></tr>
-EOF
-;
 	my @sorted_int = sort { 
 		$intervals->{$a} <=> $intervals->{$b} 
 	} keys %{ $intervals };
 
 	foreach my $int (@sorted_int) {
-		print $html_fh "<tr><td bgcolor=\"", $int_2_colors->{$int}, "\">", $int, "</td></tr>", "\n";
+		print $html_fh '<tr><td bgcolor="', 
+		               $int_2_colors->{$int}, '">', 
+		               $int, '</td></tr>', "\n";
 	}
 
+	print $html_fh $cgi->end_html;
 	close $html_fh;
 	return;
 
