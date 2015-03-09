@@ -36,7 +36,7 @@ my $expression_file;
 my $svg_filename;
 my $help;
 my $html;
-my $cutoff = 10; 
+my $cutoff = 8; 
 	# Default
 
 GetOptions(
@@ -67,20 +67,39 @@ my @values = map {
 # Get intervals
 my $max = $values[-1];
 my @intervals = (0, $cutoff);
-calc_intervals($cutoff, $max, \@intervals, $cutoff);
+
+calc_intervals(
+	$cutoff, 
+	$max, 
+	\@intervals, 
+	$cutoff
+);
+
 my $int_values = join_intervals(\@intervals);
 
 # Assign color to each interval
 my ($int_2_colors, $colors) = int_to_colors($int_values);
 
 if ($html) {
-	print_colors($int_2_colors, $int_values, $expression_file, $html);
+	print_colors(
+		$int_2_colors, 
+		$int_values, 
+		$expression_file, 
+		$html
+	);
 }
 
 # Assign a color to each node
-my $nodes_2_color = data_to_color($exp_info, $int_2_colors);
+my $nodes_2_color = data_to_color(
+	$exp_info, 
+	$int_2_colors
+);
 
-change_svg($nodes_2_color, $svg_filename, $colors);
+change_svg(
+	$nodes_2_color, 
+	$svg_filename, 
+	$colors
+);
 
 
 #================================================================================
