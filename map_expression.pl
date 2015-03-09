@@ -136,7 +136,12 @@ sub calc_intervals {
 	$interval_value += 1;
 	push @{ $intervals }, $interval_value;
 
-	calc_intervals($min, $max, $intervals, $interval_value);
+	calc_intervals(
+		$min, 
+		$max, 
+		$intervals, 
+		$interval_value
+	);
 
 } # sub calc_intervals
 
@@ -159,7 +164,11 @@ sub int_to_colors {
 	my %int_2_colors = ();
 
 	my $spect = Color::Spectrum::Multi->new();
-	my @colors = $spect->generate($number - 1, "#E6FFFF", "#000099");
+	my @colors = $spect->generate(
+		$number - 1, 
+		"#E6FFFF", 
+		"#000099"
+	);
 
 	unshift @colors, "#FFFFFF"; # Add white to first interval
 
