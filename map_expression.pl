@@ -340,8 +340,9 @@ Options:
 	--svg <file>   - svg file.
 
 	OPTIONAL:
-	--cutoff <integer> - everything below this value will be white.
-	--html   <file>    - creates an html file with the gradient generated.
+	--cutoff   <integer> - Everything below this value will be white.
+	--html     <file>    - Creates an html file with the gradient generated.
+	--colornum <integer> - Set number of colors.
 
 --------------------------------------------------------------------------
 EOF
