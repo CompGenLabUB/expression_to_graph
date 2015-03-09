@@ -26,13 +26,25 @@ use warnings;
 use strict;
 use Data::Dumper;
 use Color::Spectrum::Multi;
+use Getopt::Long;
 
 
 #================================================================================
 # VARIABLES
 #================================================================================
-my $expression_file = shift @ARGV;
-my $svg_filename    = shift @ARGV;
+my $expression_file;
+my $svg_filename;
+
+my $cutoff          = 10; 
+	# Default
+
+GetOptions(
+    'cutoff=i' => \$cutoff,
+    'exp=s'    => \$expression_file,
+    'svg=s'    => \$svg_filename
+);
+
+help() unless ($expression_file and $svg_filename);
 
 
 #================================================================================
@@ -50,9 +62,9 @@ my @values = map {
 } @sorted_nodes;
 
 # Get intervals
-my ($min, $max) = ($values[0], $values[-1]) ;
-my @intervals = ($min);
-calc_intervals($min, $max, \@intervals, $min);
+my $max = $values[-1];
+my @intervals = (0, $cutoff);
+calc_intervals($cutoff, $max, \@intervals, $cutoff);
 my $int_values = join_intervals(\@intervals);
 
 # Assign color to each interval
@@ -122,11 +134,14 @@ sub int_to_colors {
 	my %int_2_colors = ();
 
 	my $spect = Color::Spectrum::Multi->new();
-	my @colors = $spect->generate($number, "#FF0000", "#00FF00");
+	my @colors = $spect->generate($number - 1, "#E6FFFF", "#000099");
+
+	unshift @colors, "#FFFFFF"; # Add white to first interval
 
 	my @sorted_int = sort { 
 		$intervals->{$a} <=> $intervals->{$b} 
 	} keys %{ $intervals };
+
 
 	foreach my $i (0..$#colors) {
 		$int_2_colors{$sorted_int[$i]} = $colors[$i];
@@ -247,7 +262,7 @@ sub print_legend {
 
 	foreach my $color (@{ $colors }) {
 		print "<rect", "\n",
-		      "style=\"fill:$color;fill-opacity:1;stroke:none\"", "\n",
+		      "style=\"fill:$color;fill-opacity:1;stroke-opacity:1;stroke:#000000\"", "\n",
 		      "id=\"rect3099\"", "\n",
 		      "width=\"250\"", "\n",
 		      "height=\"60\"", "\n",
@@ -258,3 +273,31 @@ sub print_legend {
 
 	return;
 }
+
+#--------------------------------------------------------------------------------
+sub help {
+	print STDERR << 'EOF';
+
+--------------------------------------------------------------------------
+This script maps expression data onto an svg graph. 
+It will create an svg file with different colors depending
+on the expression of each node. The output will be printed
+to STDOUT.
+
+Usage: 
+	perl map_expression.pl --exp <file> --svg <svg_file> <options> > /path/to/output.svg
+
+Options:
+
+	REQUIRED:
+	--exp    - dot file with expression data.
+	--svg    - svg file.
+
+	OPTIONAL:
+	--cutoff - everything below this value will be white.
+
+--------------------------------------------------------------------------
+EOF
+
+exit(0);
+} # sub help
