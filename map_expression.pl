@@ -35,6 +35,7 @@ use CGI;
 my $expression_file;
 my $svg_filename;
 my $help;
+my $html;
 my $cutoff = 10; 
 	# Default
 
@@ -42,6 +43,7 @@ GetOptions(
     'cutoff=i' => \$cutoff,
     'exp=s'    => \$expression_file,
     'svg=s'    => \$svg_filename,
+    'html=s'     => \$html,
     'help'     => \$help
 );
 
@@ -70,7 +72,10 @@ my $int_values = join_intervals(\@intervals);
 
 # Assign color to each interval
 my ($int_2_colors, $colors) = int_to_colors($int_values);
-print_colors($int_2_colors, $int_values, $expression_file);
+
+if ($html) {
+	print_colors($int_2_colors, $int_values, $expression_file, $html);
+}
 
 # Assign a color to each node
 my $nodes_2_color = data_to_color($exp_info, $int_2_colors);
@@ -156,13 +161,20 @@ sub print_colors {
 	my $int_2_colors = shift;
 	my $intervals    = shift;
 	my $filename     = shift;
+	my $html_name    = shift;
+	my $out_name     = '';
+
+	if ($html_name !~ /\.html$/) {
+		$out_name = $html_name . '.html';
+	} else {
+		$out_name = $html_name;
+	}
+
+
+	open my $html_fh, '>', "$out_name"
+		or die "Can't write to $out_name : $!\n";
 
 	my $cgi = CGI->new;
-
-
-	open my $html_fh, '>', "colors_$filename.html"
-		or die "Can't write to colors_$filename.html : $!\n";
-
 	print $html_fh $cgi->header, 
 	               $cgi->start_html("${filename}_colors"),
                    $cgi->h1('Your colors');
