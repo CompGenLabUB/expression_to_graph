@@ -36,14 +36,14 @@ my $expression_file;
 my $svg_filename;
 my $help;
 my $html;
-my $cutoff = 8; 
+my $color_number = 20;
 	# Default
 
 GetOptions(
-    'cutoff=i' => \$cutoff,
+	'colornum=i' => \$color_number,
     'exp=s'    => \$expression_file,
     'svg=s'    => \$svg_filename,
-    'html=s'     => \$html,
+    'html=s'   => \$html,
     'help'     => \$help
 );
 
@@ -65,14 +65,16 @@ my @values = map {
 } @sorted_nodes;
 
 # Get intervals
-my $max = $values[-1];
-my @intervals = (0, $cutoff);
+my ($min, $max)  = ($values[0], $values[-1]);
+my $magic_number = ($max - $min) / $color_number;
+my @intervals    = ($min);
 
 calc_intervals(
-	$cutoff, 
+	$min, 
 	$max, 
 	\@intervals, 
-	$cutoff
+	$min,
+	$magic_number
 );
 
 my $int_values = join_intervals(\@intervals);
@@ -95,6 +97,7 @@ my $nodes_2_color = data_to_color(
 	$int_2_colors
 );
 
+# Print svg
 change_svg(
 	$nodes_2_color, 
 	$svg_filename, 
@@ -130,17 +133,19 @@ sub calc_intervals {
 	my $max            = shift;
 	my $intervals      = shift;
 	my $interval_value = shift;
+	my $magic_number   = shift;
 
 	return if ($interval_value >= $max);
 
-	$interval_value += 1;
+	$interval_value += $magic_number;
 	push @{ $intervals }, $interval_value;
 
 	calc_intervals(
 		$min, 
 		$max, 
 		$intervals, 
-		$interval_value
+		$interval_value,
+		$magic_number
 	);
 
 } # sub calc_intervals
@@ -165,7 +170,7 @@ sub int_to_colors {
 
 	my $spect = Color::Spectrum::Multi->new();
 	my @colors = $spect->generate(
-		$number - 1, 
+		$number -1, 
 		"#E6FFFF", 
 		"#000099"
 	);
