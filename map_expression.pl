@@ -34,6 +34,7 @@ use Getopt::Long;
 #================================================================================
 my $expression_file;
 my $svg_filename;
+my $help;
 
 my $cutoff          = 10; 
 	# Default
@@ -41,10 +42,11 @@ my $cutoff          = 10;
 GetOptions(
     'cutoff=i' => \$cutoff,
     'exp=s'    => \$expression_file,
-    'svg=s'    => \$svg_filename
+    'svg=s'    => \$svg_filename,
+    'help'     => \$help
 );
 
-help() unless ($expression_file and $svg_filename);
+help() if ($help or !$expression_file or !$svg_filename);
 
 
 #================================================================================
