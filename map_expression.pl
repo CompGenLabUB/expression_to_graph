@@ -34,6 +34,7 @@ use CGI;
 #================================================================================
 my $expression_file;
 my $svg_filename;
+my $debug;
 my $help;
 my $html;
 my $color_number = 20;
@@ -44,6 +45,7 @@ GetOptions(
     'exp=s'    => \$expression_file,
     'svg=s'    => \$svg_filename,
     'html=s'   => \$html,
+    'debug'    => \$debug,
     'help'     => \$help
 );
 
@@ -70,12 +72,12 @@ my $magic_number = ($max - $min) / $color_number;
 my @intervals    = ($min);
 
 calc_intervals(
-	$min, 
-	$max, 
-	\@intervals, 
 	$min,
-	$magic_number
+	$magic_number,
+	$color_number,
+	\@intervals
 );
+
 
 my $int_values = join_intervals(\@intervals);
 
@@ -104,6 +106,11 @@ change_svg(
 	$colors
 );
 
+if ($debug) {
+	print STDERR Dumper($exp_info);
+	print STDERR Dumper($int_2_colors);
+	print STDERR Dumper($nodes_2_color);
+}
 
 #================================================================================
 # FUNCTIONS
@@ -120,7 +127,8 @@ sub expression {
 	while (<$fh>) {
 		chomp;
 		my ($node, $value) = split /\t/, $_;
-		$exp_info{$node} = log($value)/log(2);
+		my $rounded_val    = sprintf("%.4f", $value);
+		$exp_info{$node}   = $rounded_val;
 	}
 
 	return \%exp_info;
@@ -129,26 +137,21 @@ sub expression {
 
 #--------------------------------------------------------------------------------
 sub calc_intervals {
-	my $min            = shift;
-	my $max            = shift;
-	my $intervals      = shift;
-	my $interval_value = shift;
-	my $magic_number   = shift;
+	my $min          = shift;
+	my $magic_number = shift;
+	my $color_number = shift;
+	my $intervals    = shift;
 
-	return if ($interval_value >= $max);
+	my $int_value = $min;
 
-	$interval_value += $magic_number;
-	push @{ $intervals }, $interval_value;
+	for my $i (1..$color_number) {
+		$int_value += $magic_number;
+		push @{ $intervals }, $int_value;
+	}
 
-	calc_intervals(
-		$min, 
-		$max, 
-		$intervals, 
-		$interval_value,
-		$magic_number
-	);
+	return;
+}
 
-} # sub calc_intervals
 
 #--------------------------------------------------------------------------------
 sub join_intervals {
@@ -168,9 +171,12 @@ sub int_to_colors {
 	my $number       = keys %{ $intervals };
 	my %int_2_colors = ();
 
-	my $spect = Color::Spectrum::Multi->new();
+	my $spect         = Color::Spectrum::Multi->new();
+	my $colors_needed = $number -1;
+
+	print STDERR "AAAAAAAAH ", $colors_needed , "\n";
 	my @colors = $spect->generate(
-		$number -1, 
+		$colors_needed, 
 		"#E6FFFF", 
 		"#000099"
 	);
@@ -220,7 +226,8 @@ sub print_colors {
 	foreach my $int (@sorted_int) {
 		print $html_fh '<tr><td bgcolor="', 
 		               $int_2_colors->{$int}, '">', 
-		               $int, '</td></tr>', "\n";
+		               $int_2_colors->{$int}, '</td>',
+		               "<td>$int<td>","</tr>", "\n";
 	}
 
 	print $html_fh $cgi->end_html;
