@@ -214,9 +214,9 @@ sub print_colors {
 
 	my $cgi = CGI->new;
 	print $html_fh $cgi->header, 
-	               $cgi->start_html("${filename}_colors"),
+                   $cgi->start_html("${filename}_colors"),
                    $cgi->h1('Your colors');
-	print $html_fh '<table cellspacing=\0"><tr><td>Offsets 31 54 55</td></tr>';
+	print $html_fh '<table border = "1" cellspacing="0" >';
 
 	my @sorted_int = sort { 
 		$intervals->{$a} <=> $intervals->{$b} 
@@ -226,7 +226,9 @@ sub print_colors {
 		print $html_fh '<tr><td bgcolor="', 
 		               $int_2_colors->{$int}->[1], '">', 
 		               $int_2_colors->{$int}->[1], '</td>',
-		               "<td>$int<td>","</tr>", "\n";
+		               "<td><td bgcolor=", 
+		               $int_2_colors->{$int}->[1], '>',
+		               "$int<td>", "</tr>", "\n";
 	}
 
 	print $html_fh $cgi->end_html;
