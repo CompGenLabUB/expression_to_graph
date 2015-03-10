@@ -352,27 +352,27 @@ sub print_legend {
 sub help {
 	print STDERR << 'EOF';
 
---------------------------------------------------------------------------
-This script maps expression data onto an svg graph. 
-It will create an svg file with different colors depending
-on the expression of each node. The output will be printed
-to STDOUT.
-
-Usage: 
-	perl map_expression.pl <options> > /path/to/output.svg
-
-Options:
-
-	REQUIRED:
-	--exp <file>   - dot file with expression data.
-	--svg <file>   - svg file.
-
-	OPTIONAL:
-	--cutoff   <integer> - Everything below this value will be white.
-	--html     <file>    - Creates an html file with the gradient generated.
-	--colornum <integer> - Set number of colors.
-
---------------------------------------------------------------------------
+||--------------------------------------------------------------------------------||
+||  This script maps expression data onto an svg graph.                           ||
+||  It will create an svg file with different colors depending                    ||
+||  on the expression of each node. The output will be printed                    ||
+||  to STDOUT.                                                                    ||
+||                                                                                ||
+||  Usage:                                                                        ||
+||  	perl map_expression.pl <options> > /path/to/output.svg                    ||
+||                                                                                ||
+||  Options:                                                                      ||
+||                                                                                ||
+||  	REQUIRED:                                                                 ||
+||  	--exp <file>   - dot file with expression data.                           ||
+||  	--svg <file>   - svg file.                                                ||
+||                                                                                ||
+||  	OPTIONAL:                                                                 ||
+||  	--cutoff   <integer> - Everything below this value will be white.         ||
+||  	--html     <file>    - Creates an html file with the gradient generated.  ||
+||  	--colornum <integer> - Set number of colors.                              ||
+||                                                                                ||
+||--------------------------------------------------------------------------------||
 EOF
 
 exit(0);
