@@ -174,7 +174,6 @@ sub int_to_colors {
 	my $spect         = Color::Spectrum::Multi->new();
 	my $colors_needed = $number -1;
 
-	print STDERR "AAAAAAAAH ", $colors_needed , "\n";
 	my @colors = $spect->generate(
 		$colors_needed, 
 		"#E6FFFF", 
@@ -189,7 +188,7 @@ sub int_to_colors {
 
 
 	foreach my $i (0..$#colors) {
-		$int_2_colors{$sorted_int[$i]} = $colors[$i];
+		$int_2_colors{$sorted_int[$i]} = [$i, $colors[$i]];
 	}
 
 	return (\%int_2_colors, \@colors);
@@ -225,8 +224,8 @@ sub print_colors {
 
 	foreach my $int (@sorted_int) {
 		print $html_fh '<tr><td bgcolor="', 
-		               $int_2_colors->{$int}, '">', 
-		               $int_2_colors->{$int}, '</td>',
+		               $int_2_colors->{$int}->[1], '">', 
+		               $int_2_colors->{$int}->[1], '</td>',
 		               "<td>$int<td>","</tr>", "\n";
 	}
 
@@ -242,7 +241,10 @@ sub data_to_color {
 	my $int_2_colors = shift;
 	my %data_2_color = ();
 
+	my ($min_int, $max_int);
+
 	foreach my $node (keys %{ $data }) {
+
 		foreach my $interval (keys %{ $int_2_colors }) {
 			my ($min, $max) = split /\-/, $interval;
 			my $rounded_min = sprintf("%.4f", $min);
@@ -250,16 +252,35 @@ sub data_to_color {
 			my $rounded_val = sprintf("%.4f", $data->{$node});
 
 			if ($rounded_val >= $rounded_min and $rounded_val <= $rounded_max) {
-				$data_2_color{$node} = $int_2_colors->{$interval}
+				$data_2_color{$node} = $int_2_colors->{$interval}->[1]
 					unless exists $data_2_color{$node};
 			}# if
 
 		} # foreach interval
+
 	} # foreach node
 
 	return \%data_2_color;
 
 } # sub data_2_color
+
+sub missing_nodes {
+	
+	# This will be needed when $range option is provided,
+
+	## Find missing nodes
+	#my @sorted = sort {
+	#	$int_2_colors->{$a}[0] <=> $int_2_colors->{$b}[0]
+	#} keys %$int_2_colors;
+
+	#my ($min_int, $max_int) = ($sorted[0], $sorted[-1]);
+
+	#my @missing_nodes = grep {
+	#	!exists $data_2_color{$_} 
+	#} keys %{ $data };
+
+}
+
 
 #--------------------------------------------------------------------------------
 sub change_svg {
