@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg contentScriptType="text/ecmascript" width="1162px"
+     xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
+     contentStyleType="text/css" viewBox="-125 -100 264 191" height="841px"
+     preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+     version="1.1">
+    <g id="edges">
+        <path fill="none" stroke-width="1.0"
+              d="M 7.894431,51.503422 C -11.148634,73.652779 -72.937263,78.312225 -95.086624,59.269157"
+              class="A B" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -95.086624,59.269157 C -76.043556,37.119797 -14.254929,32.460358 7.894431,51.503422"
+              class="B A" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 129.555252,-37.871563 C 120.759048,-24.590416 87.643036,-17.862999 74.361893,-26.659197"
+              class="C D" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="2.0"
+              d="M 74.361893,-26.659197 C 76.700928,2.266818 36.820446,49.164391 7.894431,51.503422"
+              class="D A" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -65.294830,-41.995617 C -31.957170,-37.933662 11.956387,18.165760 7.894431,51.503422"
+              class="E A" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -65.294830,-41.995617 C -51.000233,-15.784302 -68.875305,44.974560 -95.086624,59.269157"
+              class="E B" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 8.485825,-80.152428 C 32.359684,-82.628998 71.885330,-50.533054 74.361893,-26.659197"
+              class="K D" stroke-opacity="1.0" stroke="#999999"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 8.485825,-80.152428 C 1.361055,-57.764935 -42.907337,-34.870850 -65.294830,-41.995617"
+              class="K E" stroke-opacity="1.0" stroke="#999999"/>
+    </g>
+    <g id="nodes">
+<rect
+style="fill:#FFFFFF;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="50" />
+<rect
+style="fill:#E6FFFF;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="112" />
+<rect
+style="fill:#D6F5F8;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="174" />
+<rect
+style="fill:#C7EBF1;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="236" />
+<rect
+style="fill:#B8E1EA;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="298" />
+<rect
+style="fill:#A9D5E4;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="360" />
+<rect
+style="fill:#9ACADE;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="422" />
+<rect
+style="fill:#8BBDD8;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="484" />
+<rect
+style="fill:#7DB0D3;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="546" />
+<rect
+style="fill:#6FA3CD;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="608" />
+<rect
+style="fill:#6195C8;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="670" />
+<rect
+style="fill:#5486C3;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="732" />
+<rect
+style="fill:#4877BE;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="794" />
+<rect
+style="fill:#3C67B9;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="856" />
+<rect
+style="fill:#3057B4;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="918" />
+<rect
+style="fill:#2547AF;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="980" />
+<rect
+style="fill:#1B36AA;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="1042" />
+<rect
+style="fill:#1124A5;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="1104" />
+<rect
+style="fill:#08129F;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="1166" />
+<rect
+style="fill:#000099;fill-opacity:1;stroke-opacity:1;stroke:#000000"
+id="rect3099"
+width="250"
+height="60"
+x="70"
+y="1228" />
+	<circle fill-opacity="1.0" fill="#000099" r="40.0" cx="7.894431"
+                class="A" cy="51.50342" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        
+	<circle fill-opacity="1.0" fill="#6FA3CD" r="30.0" cx="-95.086624"
+                class="B" cy="59.269157" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        
+	<circle fill-opacity="1.0" fill="#5486C3" r="10.0" cx="129.55525"
+                class="C" cy="-37.871563" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        
+	<circle fill-opacity="1.0" fill="#C7EBF1" r="30.0" cx="74.36189"
+                class="D" cy="-26.659197" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        
+	<circle fill-opacity="1.0" fill="#FFFFFF" r="30.0" cx="-65.29483"
+                class="E" cy="-41.995617" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+        
+	<circle fill-opacity="1.0" fill="#FFFFFF" r="20.0" cx="8.485825"
+                class="K" cy="-80.15243" stroke="#000000" stroke-opacity="1.0"
+                stroke-width="1.0"/>
+    </g>
+</svg>
